@@ -24,6 +24,9 @@ function App() {
   // CARD
   const [productData, setProductData] = useState([]);
   const [selectedOptionSize, setSelectedOptionSize] = useState('');
+  // PAGINATION PAGE
+  const [paginationPage, setPaginationPage] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   return (
     <div className={styles.app}>
@@ -44,6 +47,11 @@ function App() {
           setProductData,
           selectedOptionSize,
           setSelectedOptionSize,
+
+          paginationPage,
+          setPaginationPage,
+          currentPage,
+          setCurrentPage,
 
           listGoods,
           setListGoods,

@@ -5,15 +5,7 @@ import { NoResult } from "../NoResult";
 import styles from "./products.module.scss";
 
 export function ProductList({ goods }) {
-  const { searchValue, setProductData } = useContext(Context);
-
-  const isAddCard = (event) => {
-    const id = event.target.parentNode.id;
-
-    goods.map((card) => {
-      if (card._id === id) setProductData([card]);
-    });
-  }
+  const { searchValue, currentPage } = useContext(Context);
 
   return (
     <section className={`${styles.product_list} ${searchValue ? styles.overlay : ''}`}>
@@ -23,7 +15,6 @@ export function ProductList({ goods }) {
             <Product
               {...product}
               key={product._id}
-              isAddCard={isAddCard}
             />
           ))
         ) : (

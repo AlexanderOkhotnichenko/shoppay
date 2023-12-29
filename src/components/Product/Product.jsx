@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { Cookies } from "react-cookie";
 import { FaPlus, FaMinus } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
@@ -7,55 +8,61 @@ import { Context } from "../../context";
 import { Select } from "../Select";
 import styles from "./product.module.scss";
 
-export function Product() {
-  const { productData, selectedOptionSize, setSelectedOptionSize } = useContext(Context);
+export function Product({ products }) {
+  const { selectedOptionSize, setSelectedOptionSize } = useContext(Context);
+  const [data, setData] = useState([]);
+  const pageID = Number(useParams().id);
   const cookies = new Cookies();
   const dispatch = useDispatch();
   const [selectedCount, setSelectedCount] = useState(1);
-  const [selectedImg, setSelectedImg] = useState(productData[0]?.img?.src?.front);
+  const [selectedImg, setSelectedImg] = useState(null);
   const [listSize, setListSize] = useState([]);
   const auth = cookies.get("token") && cookies.get("user");
 
   useEffect(() => {
-    if (productData.length) {
-      productData.map(({ size }) => {
-        setListSize(size);
+    if (products.length) {
+      products.map((product) => {
+        if (product.pageID === pageID) {
+          setData(product);
+          setSelectedImg(product?.img?.src?.front);
+        }
+        setListSize(product.size);
       });
 
       setSelectedOptionSize(listSize[0]);
     }
-  }, [productData, listSize]);
+  }, [products, listSize]);
 
   return (
-    <section className={styles.product} id={productData[0]?._id}>
+    <section className={styles.product} id={data?._id}>
       <div className={styles.product__content}>
         <div className={styles.left}>
           <div className={styles.gallery_hero}>
             <img
-              src={productData[0]?.img?.src?.front}
-              alt={productData[0]?.img?.alt?.front}
-              onClick={() => setSelectedImg(productData[0]?.img?.src?.front)}
+              src={data?.img?.src?.front}
+              alt={data?.img?.alt?.front}
+              onClick={() => setSelectedImg(data?.img?.src?.front)}
             />
             <img
-              src={productData[0]?.img?.src?.back}
-              alt={productData[0]?.img?.alt?.back}
-              onClick={() => setSelectedImg(productData[0]?.img?.src?.back)}
+              src={data?.img?.src?.back}
+              alt={data?.img?.alt?.back}
+              onClick={() => setSelectedImg(data?.img?.src?.back)}
             />
           </div>
           <div className={styles.main_hero}>
-            <img src={selectedImg} alt={productData[0]?.img?.alt?.front} />
+            <img src={selectedImg} alt={data?.img?.alt?.front} />
           </div>
         </div>
         <div className={styles.right}>
-          <h1 className={styles.title}>{productData[0]?.title}</h1>
+          <h1 className={styles.title}>{data?.title}</h1>
           <div className={styles.price}>
-            {productData[0]?.price?.old && (
+            {data?.price?.old && (
               <span className={styles.price__old}>
-                <s>${productData[0]?.price?.old}</s>
+                <s>${data?.price?.old}</s>
               </span>
             )}
             <span className={styles.price__new}>
-              ${productData[0]?.price?.new}
+              ${data?.price?.new}
             </span>
           </div>
           <p className={styles.description}>
@@ -98,13 +105,13 @@ export function Product() {
               onClick={() =>
                 dispatch(
                   addToCart({
-                    _id: productData[0]._id,
-                    img: productData[0].img,
-                    title: productData[0].title,
-                    price: productData[0].price,
-                    category: productData[0].category,
+                    _id: data?._id,
+                    img: data?.img,
+                    title: data?.title,
+                    price: data?.price,
+                    category: data?.category,
                     size: selectedOptionSize,
-                    color: productData[0].color,
+                    color: data?.color,
                     selectedCount,
                   })
                 )
@@ -118,7 +125,7 @@ export function Product() {
             <tbody className={styles.tbody}>
               <tr className={styles.tr}>
                 <td className={styles.td}>Category:</td>
-                <td className={styles.td}>{productData[0]?.category}</td>
+                <td className={styles.td}>{data?.category}</td>
               </tr>
               <tr className={styles.tr}>
                 <td className={styles.td}>Sizes:</td>
@@ -133,14 +140,14 @@ export function Product() {
                 <td className={styles.td}>
                   <span
                     className={styles.circle}
-                    style={{ background: productData[0].color }}
+                    style={{ background: data?.color }}
                   ></span>
                 </td>
-                <td className={styles.td}>{productData[0]?.color}</td>
+                <td className={styles.td}>{data?.color}</td>
               </tr>
               <tr className={styles.tr}>
                 <td className={styles.td}>Price:</td>
-                <td className={styles.td}>${productData[0]?.price?.new}</td>
+                <td className={styles.td}>${data?.price?.new}</td>
               </tr>
             </tbody>
           </table>

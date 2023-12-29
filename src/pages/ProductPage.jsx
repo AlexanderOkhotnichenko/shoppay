@@ -1,15 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useFetch } from "../hooks/useFetch";
 import { Product as SkeletonProduct } from "../components/Skeleton/Product";
 import { Product } from "../components/Product/Product";
-import { Context } from "../context";
 
 export function ProductPage() {
-  const { productData } = useContext(Context);
   const [loading, setLoading] = useState(true);
 
+  const { data } = useFetch('/api/products');
+
   useEffect(() => {
-    if (productData.length) setLoading(false);
-  }, [productData]);
+    if (data.length) setLoading(false);
+  }, [data]);
 
   return (
     <>
@@ -18,7 +19,7 @@ export function ProductPage() {
           <SkeletonProduct />
         </div>
       ) : (
-        <Product />
+        <Product products={data} />
       )}
     </>
   );

@@ -16,6 +16,7 @@ export function Filter({ loading, fetchProducts }) {
     selectedCategory,
     searchValue,
     setListGoods,
+    setCurrentPage
   } = useContext(Context);
 
   const handleSelectedSize = (id) => {
@@ -63,6 +64,7 @@ export function Filter({ loading, fetchProducts }) {
     }
 
     setListGoods(updateList);
+    setCurrentPage(1);
   };
 
   useEffect(() => {

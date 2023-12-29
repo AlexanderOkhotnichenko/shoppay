@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from "react-router-dom";
 import styles from "./product.module.scss";
 
-export function Product({ _id, img, title, price, link, isAddCard }) {
+export function Product({ _id, img, title, price, link }) {
   return (
     <div className={styles.product} id={_id}>
       <div className={styles.product__row}>
@@ -16,7 +16,7 @@ export function Product({ _id, img, title, price, link, isAddCard }) {
           <span className={styles.product__sale__new_price}>${price?.new}</span>
         </div>
       </div>
-      <Link to={link?.href} className={styles.product__link} onClick={isAddCard}>{link?.text}</Link>
+      <Link to={link?.href} className={styles.product__link}>{link?.text}</Link>
     </div>
   )
 }
